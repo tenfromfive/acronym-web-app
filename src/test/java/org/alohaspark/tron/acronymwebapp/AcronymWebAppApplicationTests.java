@@ -1,5 +1,6 @@
 package org.alohaspark.tron.acronymwebapp;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -11,6 +12,11 @@ public class AcronymWebAppApplicationTests {
 
     @Test
     public void contextLoads() {
+    }
+
+    @Test
+    public void emptyTest() {
+        Assert.assertTrue(true);
     }
 
 }
