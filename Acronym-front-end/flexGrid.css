@@ -1,0 +1,61 @@
+body{
+    
+    background-color: #4a5f7b;
+}
+
+h1 {
+    color: whitesmoke;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.clr{
+    clear: both;
+}
+
+.flexContainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+}
+
+.flexContainer input{
+    margin: 10px 20px;
+    padding: 20px 5px;
+}
+
+.flexContainer .button{
+    margin: 0% 46%;
+    min-height: 25px;
+    min-width: 55px;
+    padding: 3px 5px;
+    background-color: #8d909d;
+    color: #212531;
+
+}
+
+.button:hover{
+    background-color: #212531;
+    color: #8d909d;
+    color: white;
+    border: groove;
+   
+}
+
+.navbar{
+    background-color: #505664;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+
+
+}
+
+.navbar a{
+    color: whitesmoke;
+    text-decoration: none;
+    text-size-adjust: 12px;
+    float:left;
+    padding: 4px 6px;
+}
