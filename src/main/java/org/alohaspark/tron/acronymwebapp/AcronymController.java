@@ -1,5 +1,6 @@
 package org.alohaspark.tron.acronymwebapp;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,7 +12,7 @@ import java.util.List;
 public class AcronymController {
 
 
-
+    @CrossOrigin
     @RequestMapping("/acronyms")
     public AcronymContainer httpAcronymResponse(@RequestParam(name = "bullets", defaultValue = "") String bullets) {
 
