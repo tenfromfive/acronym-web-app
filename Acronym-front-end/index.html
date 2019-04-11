@@ -7,27 +7,30 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Acronyms!!!</title>
     <link rel="stylesheet" href="flexGrid.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="apiCall.js"></script>
+    <script src="autoScroll.js"></script>
 </head>
 
 <body>
         <h1>Aloha Spark Acronym Tool!</h1>
     
         <div class="flexContainer">
-        <textarea id="autoScroll" placeholder="Please Enter Text"></textarea>
-        <input class= "button" type="button" value="Submit">
-        <textarea id="autoScroll" readonly></textarea>  
-        <input class="button" type="button" value="Clear">
+        <textarea id="inputText" placeholder="Please Enter Text"></textarea>
+        <input class= "button" type="button" value="Submit" onclick="apiCall(document.getElementById('inputText').value)">
+        <textarea id="outputText" readonly> test text please ignore</textarea>  
+        <input class="button" type="button" value="Clear" onclick="document.getElementById('outputText').value = null;">
         
         
         
-        <script src="autoScroll.js"></script>
+        
         </div>
         
     <div class="navbar">
         <ul>
             <a href="#">URL PLACEHOLDER</a>
             <a href="#">URL PLACEHOLDER</a>
-            <a href="#">URL PLACEHOLDER</a>
+            <a href="#">&copy Tron SDT</a>
         </ul>
     </div>
 </body>
