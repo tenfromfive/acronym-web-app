@@ -4,10 +4,17 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.matchers.JUnitMatchers;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
 import org.omg.CosNaming.NamingContextOperations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringBootConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -20,14 +27,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
+//
 @RunWith(SpringRunner.class)
-@WebMvcTest(AcronymController.class)
+@WebMvcTest(value = AcronymController.class, excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
 @AutoConfigureRestDocs(outputDir = "target/snippets")
 public class AcronymWebLayerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    //Since test package is not a subpackage of the class with @SpringBootApplication, MongoDB repositories will
+    //not create a bean.  We have to do this manually here with these two mock beans (comment out and see what
+    //happens to learn more).
+    @MockBean
+    private AcronymRepository repository;
+
+    @MockBean
+    private MongoTemplate mongoTemplate;
 
     @Test
     public void acronymsAPIContainsOnlyAcronyms() throws Exception {
@@ -54,6 +70,27 @@ public class AcronymWebLayerTest {
         Assert.assertTrue(content.contains("NCO"));
         Assert.assertFalse(content.contains("and"));
 
+    }
+
+    @Test
+    public void returnsBlankDefinitionWhenUnkown() throws Exception {
+
+        String[] testAc = {"ASDF","QWER","HJKL"};
+
+        MvcResult result = this.mockMvc.perform(get("/acronyms?bullets="
+                + testAc[0] + "%20and%20"
+                + testAc[1] + "%20and%20"
+                + testAc[2]))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andDo(document("acronyms"))
+                .andReturn();
+
+        String content = result.getResponse().getContentAsString();
+
+        Assert.assertTrue(content.contains("{\"name\":\"" + testAc[0] + "\",\"definition\":\"\"}"));
+        Assert.assertTrue(content.contains("{\"name\":\"" + testAc[1] + "\",\"definition\":\"\"}"));
+        Assert.assertTrue(content.contains("{\"name\":\"" + testAc[2] + "\",\"definition\":\"\"}"));
     }
 
 }
