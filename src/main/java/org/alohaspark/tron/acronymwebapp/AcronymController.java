@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.*;
 
@@ -62,7 +63,8 @@ public class AcronymController {
        for(String x : foundAcros){
        System.out.println(x);
     }
-
+        Collections.sort(foundAcros);
+        
         //
         //String[] acs = {"AAs","CGO","NCO"};
         for (String ac : foundAcros) {
