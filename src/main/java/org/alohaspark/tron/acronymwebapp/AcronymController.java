@@ -22,20 +22,20 @@ public class AcronymController {
     @RequestMapping("/acronyms")
     public AcronymContainer httpAcronymResponse(@RequestParam(name = "bullets", defaultValue = "") String bullets) {
 
-        this.saveAcronyms();
+       // this.saveAcronyms();
         List<Acronym> acronyms = this.findAcronyms(bullets);
         return new AcronymContainer(acronyms);
 
     }
 
     
-
-    private void saveAcronyms() {
-        repository.deleteAll();
-        repository.save(new Acronym("AA", "Administrative Assistant"));
-        repository.save(new Acronym("CGO", "Company Grade Officer"));
-        repository.save(new Acronym("NCO", "Non-Commissioned Officer"));
-    }
+    //NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!!!!!!!!!!!!
+    // private void saveAcronyms() {
+    //     //repository.deleteAll();
+    //     // repository.save(new Acronym("AA", "Administrative Assistant"));
+    //     // repository.save(new Acronym("CGO", "Company Grade Officer"));
+    //     // repository.save(new Acronym("NCO", "Non-Commissioned Officer"));
+    // }
 
     private List<Acronym> findAcronyms(String bullets) {
 
