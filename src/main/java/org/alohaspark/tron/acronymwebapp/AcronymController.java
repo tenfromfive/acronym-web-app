@@ -23,31 +23,30 @@ public class AcronymController {
     @RequestMapping("/acronyms")
     public AcronymContainer httpAcronymResponse(@RequestParam(name = "bullets", defaultValue = "") String bullets) {
 
-       // this.saveAcronyms();
         List<Acronym> acronyms = this.findAcronyms(bullets);
         return new AcronymContainer(acronyms);
 
     }
 
-    
-    //NOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO!!!!!!!!!!!!!!
-    // private void saveAcronyms() {
-    //     //repository.deleteAll();
-    //     // repository.save(new Acronym("AA", "Administrative Assistant"));
-    //     // repository.save(new Acronym("CGO", "Company Grade Officer"));
-    //     // repository.save(new Acronym("NCO", "Non-Commissioned Officer"));
-    // }
-
     private List<Acronym> findAcronyms(String bullets) {
 
         List<Acronym> acronyms = new ArrayList<Acronym>();
-        
+        // spaces at fron and end to counter endline char regex mismatching
+        bullets = " " + bullets + " ";
+
         System.out.println("Bulets: " + bullets);
 
-       String regex1 = "[A-Z]{2,}";
+        //regex history//
+        /*
+        80% Solution: [A-Z]{2,}
+
+        98% Solution: ([A-Z]+)?(\d|\w&\w|\w-\w|\w/\w)([A-Z]*)?\d*(?=\s)|([A-Z]{2,})
+        */
+
+
+       String regex1 = "([A-Z]+)?(\\d|\\w&\\w|\\w-\\w|\\w/\\w)([A-Z]*)?\\d*(?=\\s)|([A-Z]{2,})";
        Pattern pattern = Pattern.compile(regex1); 
         
-       // Search above pattern in "geeksforgeeks.org" 
        Matcher m = pattern.matcher(bullets); 
        
        ArrayList<String> foundAcros = new ArrayList<String>();
