@@ -1,5 +1,5 @@
-use db;
-db.acronyms.save(
+use accappdb;
+db.acronym.save(
 [
 {"name": "A","definition": ["Analog"]},
 {"name": "A&P","definition": ["Administrative And Personnel","Analysis And Production"]},
