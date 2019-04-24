@@ -1,4 +1,3 @@
-use db;
 db.acronyms.save(
 [
 {"name": "A","definition": ["Analog"]},
