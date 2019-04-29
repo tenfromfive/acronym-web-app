@@ -1,7 +1,9 @@
 package org.alohaspark.tron.acronymwebapp;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection="acronyms")
 public class Acronym {
 
     @Id
