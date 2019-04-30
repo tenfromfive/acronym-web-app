@@ -21,16 +21,16 @@ import org.springframework.test.web.servlet.MvcResult;
 import sun.java2d.pipe.AAShapePipe;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = AcronymController.class, excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
-@AutoConfigureRestDocs(outputDir = "target/snippets")
+@WebMvcTest(value = AcronymController.class)
+//@AutoConfigureRestDocs(outputDir = "target/snippets")
 public class AcronymWebLayerTest {
 
     @Autowired
@@ -39,12 +39,27 @@ public class AcronymWebLayerTest {
     //Since test package is not a subpackage of the class with @SpringBootApplication, MongoDB repositories will
     //not create a bean.  We have to do this manually here with these two mock beans (comment out and see what
     //happens to learn more).
+    
     @MockBean
     private AcronymRepository repository;
 
+    /*
+     *
     @MockBean
     private MongoTemplate mongoTemplate;
+    */
+    
+    @Test
+    public void testHttpAcronymResponse() throws Exception {
+    	when(this.repository.findByName("AA")).thenReturn(new Acronym("AA","AA Definition"));
+    	
+    	this.mockMvc.perform(get("/acronyms").param("bullets","AA"))
+			    	.andDo(print())
+			    	.andExpect(status().isOk())
+			    	.andExpect(content().json("{'acronyms':[{'name':'AA','definition':'AA Definition'}]}"));
+    }
 
+/*
     @Test
     public void acronymsAPIContainsOnlyAcronyms() throws Exception {
 
@@ -71,7 +86,9 @@ public class AcronymWebLayerTest {
         Assert.assertFalse(content.contains("and"));
 
     }
+*/
 
+/*
     @Test
     public void returnsBlankDefinitionWhenUnkown() throws Exception {
 
@@ -92,5 +109,6 @@ public class AcronymWebLayerTest {
         Assert.assertTrue(content.contains("{\"name\":\"" + testAc[1] + "\",\"definition\":\"\"}"));
         Assert.assertTrue(content.contains("{\"name\":\"" + testAc[2] + "\",\"definition\":\"\"}"));
     }
+*/
 
 }
