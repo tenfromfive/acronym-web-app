@@ -58,14 +58,14 @@ pipeline {
         binaryBuild(projectName: env.BUILD, buildConfigName: env.APP_NAME, artifactsDirectoryName: env.BUILD_OUTPUT_DIR)
       }
     }
-
-/*
+    
     stage('Promote from Build to Dev') {
       steps {
         tagImage(sourceImageName: env.APP_NAME, sourceImagePath: env.BUILD, toImagePath: env.DEV)
       }
     }
 
+/*
     stage ('Verify Deployment to Dev') {
       steps {
         verifyDeployment(projectName: env.DEV, targetApp: env.APP_NAME)
