@@ -1,0 +1,3 @@
+PIPELINE_SOURCE_REPOSITORY_URL=https://github.com/haithamshahin333/acronym-web-app.git
+PIPELINE_SOURCE_REPOSITORY_REF=update-tests
+NAME=acronym-web-app

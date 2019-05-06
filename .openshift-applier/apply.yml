@@ -1,0 +1,10 @@
+---
+- name: Deploy Spring Boot
+  hosts: app
+  vars:
+    ci_cd_namespace: labs-ci-cd-haitham
+    dev_namespace: labs-dev-haitham
+    demo_namespace: labs-test-haitham
+  tasks:
+    - include_role:
+        name: openshift-applier/roles/openshift-applier
