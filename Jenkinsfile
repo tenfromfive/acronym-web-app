@@ -30,7 +30,7 @@ pipeline {
 
   
   agent {
-    label 'jenkins-slave-mvn'
+    label 'jenkins-slave-mvn:v3.11'
   }
 
   // Pipeline Stages start here
