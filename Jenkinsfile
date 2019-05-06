@@ -52,13 +52,47 @@ pipeline {
       }
     }
 
-    // Run Maven unit tests
-    stage('testing'){
+    // Build Container Image using the artifacts produced in previous stages
+    stage('Build Container Image'){
       steps {
-        sh "echo ${APP_NAME}"
-        sh "sleep 300"
+        binaryBuild(projectName: env.BUILD, buildConfigName: env.APP_NAME, artifactsDirectoryName: env.BUILD_OUTPUT_DIR)
       }
     }
+
+/*
+    stage('Promote from Build to Dev') {
+      steps {
+        tagImage(sourceImageName: env.APP_NAME, sourceImagePath: env.BUILD, toImagePath: env.DEV)
+      }
+    }
+
+    stage ('Verify Deployment to Dev') {
+      steps {
+        verifyDeployment(projectName: env.DEV, targetApp: env.APP_NAME)
+      }
+    }
+
+    stage('Promotion gate') {
+      steps {
+        script {
+          input message: 'Promote application to Test?'
+        }
+      }
+    }
+
+    stage('Promote from Dev to Test') {
+      steps {
+        tagImage(sourceImageName: env.APP_NAME, sourceImagePath: env.DEV, toImagePath: env.TEST)
+      }
+    }
+
+    stage ('Verify Deployment to Test') {
+      steps {
+        verifyDeployment(projectName: env.TEST, targetApp: env.APP_NAME)
+      }
+    }
+
+    */
 
   }
 }
