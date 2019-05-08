@@ -43,7 +43,6 @@ docker run -d --rm --name acronym-mongo-db --p 27017:27017 --network acronym-net
 docker build -t acronym-spring-image
 docker run -d --rm --name acronym-spring-app -p 8080:8080 --network acronym-network acronym-spring-image
 ```
-
 10. Build nginx image & run (uses port 8081 on localhost for nginx http port 80)
 ```dockerfile
 docker build -t acronym-nginx-image
