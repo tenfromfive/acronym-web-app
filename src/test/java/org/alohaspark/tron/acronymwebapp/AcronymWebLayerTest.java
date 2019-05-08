@@ -21,76 +21,94 @@ import org.springframework.test.web.servlet.MvcResult;
 import sun.java2d.pipe.AAShapePipe;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//
+import java.util.ArrayList;
+import java.util.List;
+
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = AcronymController.class, excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
-@AutoConfigureRestDocs(outputDir = "target/snippets")
+@WebMvcTest(value = AcronymController.class)
+//@AutoConfigureRestDocs(outputDir = "target/snippets")
 public class AcronymWebLayerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+	@Autowired
+	private MockMvc mockMvc;
 
-    //Since test package is not a subpackage of the class with @SpringBootApplication, MongoDB repositories will
-    //not create a bean.  We have to do this manually here with these two mock beans (comment out and see what
-    //happens to learn more).
-    @MockBean
-    private AcronymRepository repository;
+	// Since test package is not a subpackage of the class with
+	// @SpringBootApplication, MongoDB repositories will
+	// not create a bean. We have to do this manually here with these two mock beans
+	// (comment out and see what
+	// happens to learn more).
 
-    @MockBean
-    private MongoTemplate mongoTemplate;
+	@MockBean
+	private AcronymService service;
 
-    @Test
-    public void acronymsAPIContainsOnlyAcronyms() throws Exception {
+	/*
+	 *
+	 * @MockBean private MongoTemplate mongoTemplate;
+	 */
 
-        // Success for this test case means:
-        // (1) all acronyms are filtered & returned by the API
-        // (2) no non-acronyms from the test case are returned
-        // (3) does not care about order or syntax
-        // Note: this test case is very simple.
-        MvcResult result = this.mockMvc.perform(get("/acronyms?bullets=AA%20and%20CGO%20and%20NCO"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("acronyms"))
-                .andReturn();
+	@Test
+	public void testHttpAcronymResponse() throws Exception {
+		// setup acronym list to return from service method
+		Acronym aaAcronym = new Acronym("AA", "AA Definition");
+		List<Acronym> acronyms = new ArrayList<Acronym>();
+		acronyms.add(aaAcronym);
 
-        //convert API response to String for tests
-        String content = result.getResponse().getContentAsString();
+		// mock out the service method
+		when(this.service.findAcronyms("AA")).thenReturn(acronyms);
 
-        //Consider replacing with Matcher object when we learn more....
-        //We do this with four separate statements rather than a single boolean
-        //so that junit tells us which acronym failed
-        Assert.assertTrue(content.contains("AA"));
-        Assert.assertTrue(content.contains("CGO"));
-        Assert.assertTrue(content.contains("NCO"));
-        Assert.assertFalse(content.contains("and"));
+		// test the controller method
+		this.mockMvc.perform(get("/acronyms").param("bullets", "AA")).andDo(print()).andExpect(status().isOk())
+				.andExpect(content().json("{'acronyms':[{'name':'AA','definition':'AA Definition'}]}"));
+	}
 
-    }
+	/*
+	 * @Test public void acronymsAPIContainsOnlyAcronyms() throws Exception {
+	 * 
+	 * // Success for this test case means: // (1) all acronyms are filtered &
+	 * returned by the API // (2) no non-acronyms from the test case are returned //
+	 * (3) does not care about order or syntax // Note: this test case is very
+	 * simple. MvcResult result =
+	 * this.mockMvc.perform(get("/acronyms?bullets=AA%20and%20CGO%20and%20NCO"))
+	 * .andDo(print()) .andExpect(status().isOk()) .andDo(document("acronyms"))
+	 * .andReturn();
+	 * 
+	 * //convert API response to String for tests String content =
+	 * result.getResponse().getContentAsString();
+	 * 
+	 * //Consider replacing with Matcher object when we learn more.... //We do this
+	 * with four separate statements rather than a single boolean //so that junit
+	 * tells us which acronym failed Assert.assertTrue(content.contains("AA"));
+	 * Assert.assertTrue(content.contains("CGO"));
+	 * Assert.assertTrue(content.contains("NCO"));
+	 * Assert.assertFalse(content.contains("and"));
+	 * 
+	 * }
+	 */
 
-    @Test
-    public void returnsBlankDefinitionWhenUnkown() throws Exception {
-
-        String[] testAc = {"ASDF","QWER","HJKL"};
-
-        MvcResult result = this.mockMvc.perform(get("/acronyms?bullets="
-                + testAc[0] + "%20and%20"
-                + testAc[1] + "%20and%20"
-                + testAc[2]))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andDo(document("acronyms"))
-                .andReturn();
-
-        String content = result.getResponse().getContentAsString();
-
-        Assert.assertTrue(content.contains("{\"name\":\"" + testAc[0] + "\",\"definition\":\"\"}"));
-        Assert.assertTrue(content.contains("{\"name\":\"" + testAc[1] + "\",\"definition\":\"\"}"));
-        Assert.assertTrue(content.contains("{\"name\":\"" + testAc[2] + "\",\"definition\":\"\"}"));
-    }
+	/*
+	 * @Test public void returnsBlankDefinitionWhenUnkown() throws Exception {
+	 * 
+	 * String[] testAc = {"ASDF","QWER","HJKL"};
+	 * 
+	 * MvcResult result = this.mockMvc.perform(get("/acronyms?bullets=" + testAc[0]
+	 * + "%20and%20" + testAc[1] + "%20and%20" + testAc[2])) .andDo(print())
+	 * .andExpect(status().isOk()) .andDo(document("acronyms")) .andReturn();
+	 * 
+	 * String content = result.getResponse().getContentAsString();
+	 * 
+	 * Assert.assertTrue(content.contains("{\"name\":\"" + testAc[0] +
+	 * "\",\"definition\":\"\"}"));
+	 * Assert.assertTrue(content.contains("{\"name\":\"" + testAc[1] +
+	 * "\",\"definition\":\"\"}"));
+	 * Assert.assertTrue(content.contains("{\"name\":\"" + testAc[2] +
+	 * "\",\"definition\":\"\"}")); }
+	 */
 
 }
