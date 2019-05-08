@@ -1,48 +1,52 @@
 # acronym-web-app
+This branch launches 3x containers: one for MongoDB,
+one for nginx/front end, and one for the SpringBoot
+API.  After completing these instructions, usage is:
 
-1. Build Mongo DB Container
+- For Front-end, `localhost:8081`
+- For API call, `localhost:8080/acronyms?bullets=<text with acronyms>`
+
+1. Install docker (`docker.io`) and add your user to the 
+`docker` group to add `sudo` rights (see https://docs.docker.com/install/linux/linux-postinstall/).
+
+2. Delete any containers named `acronym-nginx-container`,
+`acronym-spring-app`, or `acronym-mongo-db`.
+
+3. `git clone` this branch
+
+4. Move into folder with Mongo Dockerfile
 ```
-cd MongoDocker
-docker build -t mongo-acronym-db .
+cd ./acronym-web-app/MongoDocker
 ```
 
-2. Create Docker Network to Support Future linking across different container services
-```
+5. Create docker software-defined network (SDN)
+```dockerfile
 docker network create acronym-network
 ```
 
-3. Start Mongo DB container
-```
-docker run -d --name acronymmongodb -p 27017:27017 --network acronym-network mongo-acronym-db
-```
-- Verify by connecting to the container and running queries to ensure initialization was successful
-```
-docker exec -it acronymmongodb bash
-mongo
-show dbs
-use start
-db.acronoyms.find()
+6. Build MongoDB Docker image named `acronym-mongo-image`
+```dockerfile
+docker build -t acronym-mongo-image ./
 ```
 
-4. Verify Spring Boot App and connect to mongo db instance running as container by using the default/dev profile
+7. Run MongoDB Docker image as a daemon, remove on exit, named
+`acronym-mongo-db`, map port 27017 on host to 27017 on container,
+and add to the SDN we defined.
+```dockerfile
+docker run -d --rm --name acronym-mongo-db --p 27017:27017 --network acronym-network acronym-mongo-image
 ```
-mvn spring-boot:run
-```
-- This will utilize the properties defined in the application.properties file
-- http://localhost:8080/acronyms?bullets=
 
-5. Ensure that the host for the mongo db in the application-prod.properties file aligns with the name of the mongo db service running
-- If you utilize the naming conventions here they will align
+8. Move to springBoot directory `cd ..`
 
-6. Build Spring Boot App Container (assuming unit tests are failing)
+9. Build Spring Boot image & run
+```dockerfile
+docker build -t acronym-spring-image
+docker run -d --rm --name acronym-spring-app -p 8080:8080 --network acronym-network acronym-spring-image
 ```
-mvn compile package -Dmaven.test.skip=true
-docker build -t spring-boot-app .
+10. Build nginx image & run (uses port 8081 on localhost for nginx http port 80)
+```dockerfile
+docker build -t acronym-nginx-image
+docker run -d --rm --name acronym-nginx-container -p 8081:80 --network acronym-network acronym-nginx-image
 ```
-- Notice that the Dockerfile specifies the prod profile when running the application. This will pull in properties from application-prod.properties
 
-7. Run Spring Boot App Container
-```
-docker run -d --name spring-boot-app -p 8080:8080 --network acronym-network spring-boot-app
-```
-- http://localhost:8080/acronyms?bullets=
+11. Access the app at `localhost:8081`!
