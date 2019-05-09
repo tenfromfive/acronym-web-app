@@ -32,4 +32,15 @@ public class AcronymServiceTest {
 		
 	}
 
+	@Test
+	public void shouldFilterDuplicates(){
+
+		Mockito.when(repository.findByName("AA")).thenReturn(Acronym.createSingleDefAcronym("AA","AA Definition", true));
+
+		List<Acronym> acronyms = service.findAcronyms("AAandAA");
+
+		assertEquals(1, acronyms.size());
+
+	}
+
 }
