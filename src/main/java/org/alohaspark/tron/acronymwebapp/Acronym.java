@@ -4,6 +4,7 @@ package org.alohaspark.tron.acronymwebapp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "acronyms")
@@ -20,20 +21,36 @@ public class Acronym {
         this.definitions = definitions;
     }
 
+    public Acronym(String name, String definition, boolean verified) {
+        this.name = name;
+
+        List<Definition> definitionList = new ArrayList<Definition>();
+        definitionList.add(new Definition(definition,verified));
+
+        this.definitions = definitionList;
+    }
+
+    public static Acronym createSingleDefAcronym(String name, String definition, boolean verified) {
+
+        List<Definition> definitionList = new ArrayList<Definition>();
+        definitionList.add(new Definition(definition,verified));
+        return new Acronym(name, definitionList);
+
+    }
+
     public String getName() {
         return name;
     }
 
-    public String getDefinition() {
-        return definition;
+    public List<Definition> getDefinitions() {
+        return definitions;
     }
 
-    public boolean getVerified(){ return verified;}
 
     @Override
     public String toString() {
         return String.format("Acronym[id=%s, name='%s', definition='%s']",
-                this.id, this.name, this.definition);
+                this.id, this.name, this.definitions.toString());
     }
 
 }

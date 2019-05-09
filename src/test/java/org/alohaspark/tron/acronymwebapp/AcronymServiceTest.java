@@ -24,11 +24,11 @@ public class AcronymServiceTest {
 	@Test
 	public void shouldReturnAcronymList() {
 		
-		Mockito.when(repository.findByName("AA")).thenReturn(new Acronym("AA","AA Definition", true));
+		Mockito.when(repository.findByName("AA")).thenReturn(Acronym.createSingleDefAcronym("AA","AA Definition", true));
 		
 		List<Acronym> acronyms = service.findAcronyms("AA");
 		
-		assertEquals("AA Definition", acronyms.get(0).getDefinition());
+		assertEquals("AA Definition", acronyms.get(0).getDefinitions().get(0).getDefinition());
 		
 	}
 

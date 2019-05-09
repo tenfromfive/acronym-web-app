@@ -56,7 +56,7 @@ public class AcronymWebLayerTest {
 	@Test
 	public void testHttpAcronymResponse() throws Exception {
 		// setup acronym list to return from service method
-		Acronym aaAcronym = new Acronym("AA", "AA Definition", true);
+		Acronym aaAcronym = Acronym.createSingleDefAcronym("AA", "AA Definition", true);
 		List<Acronym> acronyms = new ArrayList<Acronym>();
 		acronyms.add(aaAcronym);
 
@@ -64,9 +64,9 @@ public class AcronymWebLayerTest {
 		when(this.service.findAcronyms("AA")).thenReturn(acronyms);
 
 		// test the controller method
-		this.mockMvc.perform(get("/acronyms").param("bullets", "")).andDo(print()).andExpect(status().isOk())
+		this.mockMvc.perform(get("/acronyms").param("bullets", "AA")).andDo(print()).andExpect(status().isOk())
 				.andExpect(content().json(
-"{\"acronyms\":[{\"name\":\"AA\",\"definitions\":[{\"definition\":\"AA Definition\",\"verified\":\"true\"}]}]}"));
+"{\"acronyms\":[{\"name\":\"AA\",\"definitions\":[{\"definition\":\"AA Definition\",\"verified\":true}]}]}"));
 	}
 
 //	@Test
