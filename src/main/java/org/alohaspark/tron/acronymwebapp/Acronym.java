@@ -21,15 +21,6 @@ public class Acronym {
         this.definitions = definitions;
     }
 
-    public Acronym(String name, String definition, boolean verified) {
-        this.name = name;
-
-        List<Definition> definitionList = new ArrayList<Definition>();
-        definitionList.add(new Definition(definition,verified));
-
-        this.definitions = definitionList;
-    }
-
     public static Acronym createSingleDefAcronym(String name, String definition, boolean verified) {
 
         List<Definition> definitionList = new ArrayList<Definition>();
