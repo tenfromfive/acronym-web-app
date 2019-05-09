@@ -55,7 +55,7 @@ public class AcronymService {
 		for (String ac : foundAcros) {
 			Acronym tempAc = repository.findByName(ac);
 			if (tempAc == null) {
-				acronyms.add(new Acronym(ac, ""));
+				acronyms.add(new Acronym(ac, "",false));
 			} else {
 				acronyms.add(tempAc);
 			}

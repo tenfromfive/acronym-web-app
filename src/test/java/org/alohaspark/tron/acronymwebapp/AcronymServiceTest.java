@@ -24,7 +24,7 @@ public class AcronymServiceTest {
 	@Test
 	public void shouldReturnAcronymList() {
 		
-		Mockito.when(repository.findByName("AA")).thenReturn(new Acronym("AA","AA Definition"));
+		Mockito.when(repository.findByName("AA")).thenReturn(new Acronym("AA","AA Definition", true));
 		
 		List<Acronym> acronyms = service.findAcronyms("AA");
 		

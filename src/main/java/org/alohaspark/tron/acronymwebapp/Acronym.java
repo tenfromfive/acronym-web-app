@@ -1,7 +1,10 @@
 package org.alohaspark.tron.acronymwebapp;
 
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.List;
 
 @Document(collection = "acronyms")
 public class Acronym {
@@ -10,11 +13,11 @@ public class Acronym {
     private String id;
 
     private final String name;
-    private final String definition;
+    private final List<Definition> definitions;
 
-    public Acronym(String name, String definition) {
+    public Acronym(String name, List<Definition> definitions) {
         this.name = name;
-        this.definition = definition;
+        this.definitions = definitions;
     }
 
     public String getName() {
@@ -24,6 +27,8 @@ public class Acronym {
     public String getDefinition() {
         return definition;
     }
+
+    public boolean getVerified(){ return verified;}
 
     @Override
     public String toString() {
