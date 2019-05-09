@@ -22,6 +22,9 @@ public class AcronymController {
     @CrossOrigin
     @RequestMapping("/acronyms")
     public AcronymContainer httpAcronymResponse(@RequestParam(name = "bullets", defaultValue = "") String bullets) {
+
+//        return "{\"acronyms\":[{\"name\":\"AA\",\"definitions\":[{\"definition\":\"AA Definition\",\"verified\":\"true\"}]}]}";
+
         List<Acronym> acronyms = this.service.findAcronyms(bullets);
         return new AcronymContainer(acronyms);
     }

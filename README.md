@@ -33,7 +33,7 @@ docker build -t acronym-mongo-image ./
 `acronym-mongo-db`, map port 27017 on host to 27017 on container,
 and add to the SDN we defined.
 ```dockerfile
-docker run -d --rm --name acronym-mongo-db --p 27017:27017 --network acronym-network acronym-mongo-image
+docker run -d --rm --name acronym-mongo-db -p 27017:27017 --network acronym-network acronym-mongo-image
 ```
 
 8. Move to springBoot directory `cd ..`
