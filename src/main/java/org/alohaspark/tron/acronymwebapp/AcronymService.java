@@ -3,6 +3,7 @@ package org.alohaspark.tron.acronymwebapp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,20 +16,29 @@ public class AcronymService {
 	@Autowired
 	private AcronymRepository repository;
 
-//	public List<Acronym> findAcronyms(String bullets) {
-//
-//		Acronym aa = Acronym.createSingleDefAcronym("AA", "Admin Assist", true);
-//
-//		repository.deleteAll();
-//		repository.save(aa);
-//
-//		Acronym temp = repository.findByName("AA");
-//
-//		List<Acronym> output = new ArrayList<Acronym>();
-//		output.add(temp);
-//
-//		return output;
-//	}
+
+
+
+
+
+	public Acronym addAcronym(Map<String , String> input){
+
+	    Acronym acronym = repository.findByName(input.get("name"));
+
+	    if(acronym == null){
+	        acronym = Acronym.createSingleDefAcronym(input.get("name"), input.get("definition"), false);
+        } else {
+	        Definition definition = new Definition(input.get("definition"),false);
+	        acronym.getDefinitions().add(definition);
+        }
+        repository.save(acronym);
+        return acronym;
+    };
+
+
+
+
+
 
 	public List<Acronym> findAcronyms(String bullets) {
 
@@ -54,6 +64,7 @@ public class AcronymService {
 
 		// Print starting and ending indexes of the pattern
 		// in text
+
 		while (m.find()) {
 			System.out.println("Pattern found from " + m.start() + " to " + (m.end() - 1));
 			System.out.println(m.group(0));
@@ -61,8 +72,6 @@ public class AcronymService {
 			if (!foundAcros.contains(m.group(0))){
 				foundAcros.add(m.group(0));
 			}
-
-
 		}
 		System.out.println("Array List: ");
 		for (String x : foundAcros) {
@@ -70,7 +79,6 @@ public class AcronymService {
 		}
 		Collections.sort(foundAcros);
 
-		//
 		// String[] acs = {"AAs","CGO","NCO"};
 		for (String ac : foundAcros) {
 			Acronym tempAc = repository.findByName(ac);

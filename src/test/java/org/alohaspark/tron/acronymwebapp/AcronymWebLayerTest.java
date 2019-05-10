@@ -70,7 +70,6 @@ public class AcronymWebLayerTest {
 	}
 
 
-
 //	@Test
 //	public void testHttpAcronymResponse() throws Exception {
 //		// setup acronym list to return from service method
