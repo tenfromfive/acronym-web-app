@@ -1,4 +1,4 @@
-PIPELINE_SOURCE_REPOSITORY_URL=https://github.com/haithamshahin333/acronym-web-app.git
-PIPELINE_SOURCE_REPOSITORY_REF=update-tests
+PIPELINE_SOURCE_REPOSITORY_URL=https://github.com/tenfromfive/acronym-web-app.git
+PIPELINE_SOURCE_REPOSITORY_REF=Add-Acronym-Feature
 NAME=acronym-web-app
 S2I_BASE_IMAGE=redhat-openjdk18-openshift:1.2
