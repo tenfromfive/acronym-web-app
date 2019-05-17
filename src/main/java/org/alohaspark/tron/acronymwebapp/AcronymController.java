@@ -2,14 +2,14 @@ package org.alohaspark.tron.acronymwebapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.*;
 
 @RestController
@@ -18,6 +18,8 @@ public class AcronymController {
     @Autowired
     private AcronymService service;
 
+    @Autowired
+    private AcronymRepository repository;
 
     @CrossOrigin
     @RequestMapping("/acronyms")
@@ -29,6 +31,12 @@ public class AcronymController {
         return new AcronymContainer(acronyms);
     }
 
-    
+    @PostMapping("/acronyms")
+    public ResponseEntity newAcronym(@RequestBody Map<String, String> newAcronym) {
+
+        service.addAcronym(newAcronym);
+
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
 
