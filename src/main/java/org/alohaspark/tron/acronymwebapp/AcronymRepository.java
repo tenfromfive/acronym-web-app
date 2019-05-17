@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 public interface AcronymRepository extends MongoRepository<Acronym, String> {
 
     public Acronym findByName(String name);
-    public Acronym findByDefinitions(String definition);
+    //public Acronym findByDefinitions(String definition);
 
 }
 
