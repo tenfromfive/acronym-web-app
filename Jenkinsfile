@@ -44,13 +44,14 @@ pipeline {
         sh "mvn -B clean install -DskipTests=true -f ${POM_FILE}"
       }
     }
-
+/*
     // Run Maven unit tests
     stage('Unit Test'){
       steps {
-        sh "mvn -B test -f ${POM_FILE}"
+        sh mvn -B test -f ${POM_FILE}"
       }
     }
+*/
 
     // Build Container Image using the artifacts produced in previous stages
     stage('Build Container Image'){
